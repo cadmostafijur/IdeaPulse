@@ -243,12 +243,3 @@ Set in production:
 ## 📝 License
 
 This project is licensed under the MIT License.
-
-## 👥 Contributors
-
-Built with ❤️ by the IdeaPulse team.
-
-## 🆘 Support
-
-For support, email contact@ideapulse.com or visit our contact page.
-
