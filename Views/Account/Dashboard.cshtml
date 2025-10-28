@@ -1,0 +1,80 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/dashboard.css" />
+
+<div class="dashboard-container">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>My Dashboard</h1>
+            <a href="/Idea/Analyzer" class="btn-primary">Analyze New Idea</a>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalIdeas">0</div>
+                <div class="stat-label">Ideas Analyzed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgScore">0</div>
+                <div class="stat-label">Avg Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="topScore">0</div>
+                <div class="stat-label">Top Score</div>
+            </div>
+        </div>
+
+        <div class="ideas-section">
+            <h2>My Ideas</h2>
+            <div class="ideas-grid" id="ideasGrid">
+                <div class="loading">Loading your ideas...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        loadIdeas();
+    });
+
+    function loadIdeas() {
+        $.get('/api/ideas', function(ideas) {
+            if (ideas.length === 0) {
+                $('#ideasGrid').html('<div class="empty-state">No ideas analyzed yet. <a href="/Idea/Analyzer">Analyze your first idea!</a></div>');
+                return;
+            }
+
+            $('#totalIdeas').text(ideas.length);
+            const scores = ideas.map(i => i.validationScore);
+            $('#avgScore').text(Math.round(scores.reduce((a,b) => a+b, 0) / scores.length));
+            $('#topScore').text(Math.max(...scores));
+
+            const html = ideas.map(idea => `
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <h3>${escapeHtml(idea.startupName)}</h3>
+                        <div class="validation-score">${idea.validationScore}/100</div>
+                    </div>
+                    <p class="idea-industry">${escapeHtml(idea.industry || 'General')}</p>
+                    <p class="idea-date">${new Date(idea.createdAt).toLocaleDateString()}</p>
+                    <div class="idea-actions">
+                        <a href="/Idea/Result/${idea.id}" class="btn-secondary">View Full Report</a>
+                        <a href="/PDF/generate/${idea.id}" class="btn-secondary" target="_blank">Download PDF</a>
+                    </div>
+                </div>
+            `).join('');
+
+            $('#ideasGrid').html(html);
+        });
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+

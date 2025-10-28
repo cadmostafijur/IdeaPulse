@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<div class="page-container">
+    <div class="container">
+        <h1>Contact Us</h1>
+        
+        <div class="contact-wrapper">
+            <div class="contact-form">
+                <h2>Send us a message</h2>
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success">@TempData["Message"]</div>
+                }
+                
+                <form method="post" action="/Home/SubmitContact">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="message" class="form-control" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Send Message</button>
+                </form>
+            </div>
+
+            <div class="contact-info">
+                <h2>Get in touch</h2>
+                <p>Have questions about IdeaPulse? We'd love to hear from you!</p>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>contact@ideapulse.com</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contact-wrapper { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; margin-top: 30px; }
+    .form-group { margin-bottom: 20px; }
+    .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; }
+    .contact-info { padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .info-item { display: flex; align-items: center; gap: 10px; margin: 15px 0; }
+    @@media (max-width: 768px) { .contact-wrapper { grid-template-columns: 1fr; } }
+</style>
+

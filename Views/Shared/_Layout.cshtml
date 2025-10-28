@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IdeaPulse</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a class="navbar-brand" href="/">🚀 IdeaPulse</a>
+                <div class="navbar-menu">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/Home/About" class="nav-link">About</a>
+                    <a href="/Idea/Analyzer" class="nav-link">Analyze</a>
+                    
+                    @if (Context.Session.GetInt32("UserId") != null)
+                    {
+                        <a href="/Account/Dashboard" class="nav-link">Dashboard</a>
+                        @if (Context.Session.GetString("UserRole") == "Admin")
+                        {
+                            <a href="/Admin/Dashboard" class="nav-link">Admin</a>
+                        }
+                        <a href="/Account/Logout" class="nav-link">Logout</a>
+                    }
+                    else
+                    {
+                        <a href="/Account/Login" class="nav-link">Login</a>
+                        <a href="/Account/Signup" class="nav-link btn-primary">Sign Up</a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h4>🚀 IdeaPulse</h4>
+                    <p>AI-Driven Startup Idea Validator</p>
+                </div>
+                <div>
+                    <h4>Quick Links</h4>
+                    <a href="/">Home</a>
+                    <a href="/Home/About">About</a>
+                    <a href="/Home/Contact">Contact</a>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <a href="/Home/Privacy">Privacy Policy</a>
+                    <a href="/Home/Terms">Terms of Service</a>
+                </div>
+            </div>
+            <p class="footer-copyright">&copy; @DateTime.Now.Year IdeaPulse. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

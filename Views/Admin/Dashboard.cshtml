@@ -1,0 +1,91 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/admin.css" />
+
+<div class="admin-container">
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-value">@ViewBag.Stats.TotalUsers</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">@ViewBag.Stats.TotalIdeas</div>
+                <div class="stat-label">Total Ideas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">@ViewBag.Stats.TotalAIRequests</div>
+                <div class="stat-label">AI Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">@Math.Round(ViewBag.Stats.AvgValidationScore, 0)</div>
+                <div class="stat-label">Avg Score</div>
+            </div>
+        </div>
+
+        <div class="admin-sections">
+            <div class="section">
+                <h2>Recent Ideas</h2>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Startup Name</th>
+                                <th>Industry</th>
+                                <th>Score</th>
+                                <th>User</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var idea in ViewBag.RecentIdeas)
+                            {
+                                <tr>
+                                    <td>@idea.StartupName</td>
+                                    <td>@(idea.Industry ?? "General")</td>
+                                    <td><span class="badge">@idea.ValidationScore</span></td>
+                                    <td>@(idea.User?.Name ?? "Guest")</td>
+                                    <td>@idea.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <a href="/Admin/Ideas" class="btn-secondary">View All Ideas</a>
+            </div>
+
+            <div class="section">
+                <h2>Recent Users</h2>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in ViewBag.RecentUsers)
+                            {
+                                <tr>
+                                    <td>@user.Name</td>
+                                    <td>@user.Email</td>
+                                    <td><span class="badge">@user.Role</span></td>
+                                    <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <a href="/Admin/Users" class="btn-secondary">View All Users</a>
+            </div>
+        </div>
+    </div>
+</div>
+

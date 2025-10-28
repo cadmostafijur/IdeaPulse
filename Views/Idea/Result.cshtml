@@ -1,0 +1,165 @@
+@{
+    ViewData["Title"] = "Analysis Result";
+}
+
+<link rel="stylesheet" href="~/css/result.css" />
+
+<div class="result-container">
+    <div class="container">
+        <div id="loadingState" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading analysis results...</p>
+        </div>
+
+        <div id="resultContent" style="display: none;">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        const ideaId = @ViewBag.IdeaId;
+        loadAnalysisResult(ideaId);
+    });
+
+    async function loadAnalysisResult(id) {
+        try {
+            const response = await fetch(`/api/ideas/${id}`);
+            const analysis = await response.json();
+
+            displayResults(analysis);
+        } catch (error) {
+            $('#loadingState').html('<div class="error">Failed to load results. Please try again.</div>');
+        }
+    }
+
+    function displayResults(analysis) {
+        const scoreLabel = getScoreLabel(analysis.validationScore);
+        const scoreColor = getScoreColor(analysis.validationScore);
+
+        const html = `
+            <div class="result-header">
+                <div>
+                    <h1>${escapeHtml(analysis.startupName)}</h1>
+                    <p class="idea-description">${escapeHtml(analysis.description)}</p>
+                </div>
+                <div class="validation-score-large" style="background: ${scoreColor}">
+                    <div class="score-value">${analysis.validationScore}</div>
+                    <div class="score-label">${scoreLabel}</div>
+                </div>
+            </div>
+
+            <div class="result-summary">
+                <h2>Summary</h2>
+                <p>${escapeHtml(analysis.summary)}</p>
+            </div>
+
+            <div class="results-grid">
+                ${analysis.industryInsights ? `
+                    <div class="result-card">
+                        <h3>📊 Industry Insights</h3>
+                        <div class="card-content">
+                            <strong>Sector:</strong> ${escapeHtml(analysis.industryInsights.sector)}<br/>
+                            <p>${escapeHtml(analysis.industryInsights.overview)}</p>
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${analysis.targetMarket ? `
+                    <div class="result-card">
+                        <h3>🎯 Target Market</h3>
+                        <div class="card-content">
+                            <strong>Customer Group:</strong> ${escapeHtml(analysis.targetMarket.customerGroup)}<br/>
+                            <p>${escapeHtml(analysis.targetMarket.demographics)}</p>
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${analysis.marketDemand ? `
+                    <div class="result-card">
+                        <h3>📈 Market Demand</h3>
+                        <div class="card-content">
+                            <strong>Demand Level:</strong> ${escapeHtml(analysis.marketDemand.demandLevel)}<br/>
+                            <p>${escapeHtml(analysis.marketDemand.analysis)}</p>
+                            <div class="growth-indicator">
+                                <strong>Growth Potential:</strong> ${analysis.marketDemand.growthPotential}%
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${analysis.marketDemand.growthPotential}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+
+            ${analysis.competitors && analysis.competitors.length > 0 ? `
+                <div class="competitors-section">
+                    <h2>🏢 Competitive Landscape</h2>
+                    <div class="competitors-grid">
+                        ${analysis.competitors.map(comp => `
+                            <div class="competitor-card">
+                                <h4>${escapeHtml(comp.name)}</h4>
+                                <p>${escapeHtml(comp.description)}</p>
+                                <div class="competitive-edge">
+                                    <strong>Your Edge:</strong> ${escapeHtml(comp.competitiveEdge)}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+
+            <div class="challenges-recommendations">
+                ${analysis.challenges && analysis.challenges.length > 0 ? `
+                    <div class="challenges-box">
+                        <h3>⚠️ Key Challenges</h3>
+                        <ul>
+                            ${analysis.challenges.map(c => `<li>${escapeHtml(c)}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+
+                ${analysis.recommendations && analysis.recommendations.length > 0 ? `
+                    <div class="recommendations-box">
+                        <h3>✅ Recommendations</h3>
+                        <ul>
+                            ${analysis.recommendations.map(r => `<li>${escapeHtml(r)}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            </div>
+
+            <div class="result-actions">
+                <a href="/PDF/generate/${analysis.id}" class="btn-primary">📄 Download PDF Report</a>
+                <a href="/Idea/Analyzer" class="btn-secondary">🔄 Analyze Another Idea</a>
+                <a href="/Account/Dashboard" class="btn-secondary">📊 Go to Dashboard</a>
+            </div>
+        `;
+
+        $('#resultContent').html(html);
+        $('#loadingState').hide();
+        $('#resultContent').show();
+    }
+
+    function getScoreLabel(score) {
+        if (score >= 80) return '🎯 Promising';
+        if (score >= 60) return '🔵 Moderate';
+        if (score >= 40) return '⚠️ Needs Work';
+        return '🚫 High Risk';
+    }
+
+    function getScoreColor(score) {
+        if (score >= 80) return 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        if (score >= 60) return 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+        if (score >= 40) return 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)';
+        return 'linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%)';
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+

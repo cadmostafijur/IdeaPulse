@@ -1,0 +1,106 @@
+@{
+    ViewData["Title"] = "Analyze Your Idea";
+}
+
+<link rel="stylesheet" href="~/css/analyzer.css" />
+
+<div class="analyzer-container">
+    <div class="container">
+        <h1>Analyze Your Startup Idea</h1>
+        <p class="subtitle">Enter your idea details and get instant AI-powered validation</p>
+
+        <form id="analyzeForm" class="analyzer-form">
+            <div class="form-group">
+                <label>Startup Name</label>
+                <input type="text" id="startupName" class="form-control" required placeholder="e.g., FoodDelivery Pro" />
+            </div>
+
+            <div class="form-group">
+                <label>Short Description</label>
+                <textarea id="description" class="form-control" rows="5" required placeholder="Describe your startup idea in detail..."></textarea>
+                <small>Be as detailed as possible for better analysis results</small>
+            </div>
+
+            <div class="form-group">
+                <label>Industry (Optional)</label>
+                <select id="industry" class="form-control">
+                    <option value="">Select Industry</option>
+                    <option value="Technology">Technology</option>
+                    <option value="E-commerce">E-commerce</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Education">Education</option>
+                    <option value="Food & Beverage">Food & Beverage</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-primary btn-large">
+                <span id="analyzeBtnText">Analyze Idea</span>
+                <span id="analyzeBtnLoader" style="display: none;">🤖 Analyzing...</span>
+            </button>
+        </form>
+
+        <div id="errorMessage" class="alert alert-error" style="display: none;"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#analyzeForm').on('submit', async function(e) {
+            e.preventDefault();
+
+            const startupName = $('#startupName').val().trim();
+            const description = $('#description').val().trim();
+            const industry = $('#industry').val();
+
+            if (!startupName || !description) {
+                showError('Please fill in all required fields');
+                return;
+            }
+
+            // Show loading state
+            $('#analyzeBtnText').hide();
+            $('#analyzeBtnLoader').show();
+            $('#analyzeForm button').prop('disabled', true);
+            $('#errorMessage').hide();
+
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        startupName,
+                        description,
+                        industry
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Redirect to result page
+                    window.location.href = `/Idea/Result/${result.id}`;
+                } else {
+                    throw new Error(result.error || 'Analysis failed');
+                }
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                $('#analyzeBtnText').show();
+                $('#analyzeBtnLoader').hide();
+                $('#analyzeForm button').prop('disabled', false);
+            }
+        });
+    });
+
+    function showError(message) {
+        $('#errorMessage').text(message).show();
+    }
+</script>
+
