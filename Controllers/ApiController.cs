@@ -49,7 +49,7 @@ public class ApiController : ControllerBase
                 Challenges = JsonSerializer.Serialize(analysisResult.Challenges),
                 Recommendations = JsonSerializer.Serialize(analysisResult.Recommendations),
                 ValidationScore = analysisResult.ValidationScore,
-                UserId = userId,
+                UserId = userId ?? 0,
                 CreatedAt = DateTime.UtcNow
             };
 
