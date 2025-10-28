@@ -1,0 +1,7 @@
+## Keep only the project summary, ignore other readme/docs
+PROJECT_SUMMARY.md 
+SETUP_GUIDE.md
+QUICK_START.md
+RESTART_NEEDED.md
+!.gitignore
+!PROJECT_SUMMARY.md
