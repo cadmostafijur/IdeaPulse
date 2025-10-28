@@ -8,7 +8,7 @@ using System.Text.Json;
 namespace IdeaPulse.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api")]
 public class ApiController : ControllerBase
 {
     private readonly OpenAIService _openAIService;
@@ -49,7 +49,7 @@ public class ApiController : ControllerBase
                 Challenges = JsonSerializer.Serialize(analysisResult.Challenges),
                 Recommendations = JsonSerializer.Serialize(analysisResult.Recommendations),
                 ValidationScore = analysisResult.ValidationScore,
-                UserId = userId ?? 0,
+                UserId = userId,
                 CreatedAt = DateTime.UtcNow
             };
 
