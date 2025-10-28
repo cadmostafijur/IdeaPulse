@@ -1,19 +1,19 @@
-# 🚀 IdeaPulse - AI-Driven Startup Idea Validator
+# IdeaPulse - AI-Driven Startup Idea Validator
 
 IdeaPulse is an AI-powered web platform that helps entrepreneurs, students, and investors instantly validate startup ideas.
 
-## 🌟 Features
+## Features
 
-- ✨ AI-powered market validation analysis
-- 📊 Detailed insights on competitors, market demand, and industry trends
-- 📄 Downloadable PDF reports for investors
-- 🎯 Validation scoring (0-100)
-- 👥 User dashboard to track all analyzed ideas
-- 🔐 Secure authentication system
-- 👨‍💼 Admin dashboard for platform management
-- 📈 Real-time analytics and monitoring
+- AI-powered market validation analysis
+- Detailed insights on competitors, market demand, and industry trends
+- Downloadable PDF reports for investors
+- Validation scoring (0-100)
+- User dashboard to track all analyzed ideas
+- Secure authentication system
+- Admin dashboard for platform management
+- Real-time analytics and monitoring
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**: ASP.NET Razor Pages
 - **Backend**: ASP.NET Core 8.0
@@ -22,14 +22,14 @@ IdeaPulse is an AI-powered web platform that helps entrepreneurs, students, and 
 - **PDF Generation**: QuestPDF
 - **Styling**: Custom CSS with modern design
 
-## 📋 Prerequisites
+## Prerequisites
 
 - .NET 8.0 SDK
 - PostgreSQL database (Neon DB recommended)
 - OpenAI API key
 - (Optional) NewsAPI key for competitor data
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. Clone the Repository
 
@@ -87,7 +87,7 @@ dotnet run
 
 Navigate to `https://localhost:5001` (or the port shown in the console)
 
-## 👤 Default Users
+## Default Users
 
 The application seeds with the following default users:
 
@@ -101,7 +101,7 @@ The application seeds with the following default users:
 - Password: `demo123`
 - Role: Entrepreneur
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 IdeaPulse/
@@ -137,7 +137,7 @@ IdeaPulse/
 └── Migrations/        # Database Migrations
 ```
 
-## 🎨 Website Pages
+## Website Pages
 
 1. **Home Page** (`/`) - Landing page with hero section and features
 2. **Idea Analyzer** (`/Idea/Analyzer`) - Input page for startup ideas
@@ -149,7 +149,7 @@ IdeaPulse/
 8. **Contact** (`/Home/Contact`) - Contact form
 9. **Legal Pages** (`/Home/Privacy`, `/Home/Terms`) - Privacy and Terms
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### POST `/api/analyze`
 Analyze a startup idea using AI.
@@ -183,7 +183,7 @@ Get all user's analyzed ideas.
 ### GET `/PDF/generate/{id}`
 Generate and download PDF report for an idea.
 
-## 🎯 Usage Examples
+## Usage Examples
 
 ### As an Entrepreneur:
 1. Sign up for an account
@@ -204,7 +204,7 @@ Generate and download PDF report for an idea.
 3. Monitor AI usage and costs
 4. Manage users and content
 
-## 🔐 Security Features
+## Security Features
 
 - BCrypt password hashing
 - Session-based authentication
@@ -212,7 +212,7 @@ Generate and download PDF report for an idea.
 - XSS protection in Razor views
 - HTTPS enforcement
 
-## 📊 Admin Dashboard Features
+## Admin Dashboard Features
 
 - Total users count
 - Total ideas analyzed
@@ -221,7 +221,7 @@ Generate and download PDF report for an idea.
 - AI request logs
 - System monitoring
 
-## 🚀 Deployment
+## Deployment
 
 ### Deploy to Azure:
 ```bash
@@ -240,6 +240,6 @@ Set in production:
 - `OpenAI:ApiKey`
 - `NewsAPI:ApiKey`
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License.
